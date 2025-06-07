@@ -267,27 +267,31 @@ export const register = async (data) => {
   return res.data;
 };
 
-export const getOffers = async () => {
-  if (isBrowser) {
-    const cached = localStorage.getItem('cachedOffers');
-    if (cached) {
-      try {
-        return JSON.parse(cached);
-      } catch (err) {
-        console.warn('🧹 Invalid cached offers:', err);
+export const getOffers = async ({url}) => {
+  try {
+      const response = await axios.get(`${API_URL}/voyages`, {
+          timeout: 30000, // Set a timeout for the request
+          validateStatus: (status) => status < 500 // Accept only successful responses
+      });
+      console.log('Raw API Response:', response); // Debug log
+      
+      // Check if response has data property
+      if (response.data && response.data.data) {
+          return response.data.data;
       }
-    }
+      
+      // If response is already an array, return it
+      if (Array.isArray(response.data)) {
+          return response.data;
+      }
+      
+      // If response is an object with a different structure, return empty array
+      console.warn('Unexpected API response structure:', response.data);
+      return [];
+  } catch (error) {
+      console.error('Error fetching offers:', error.response || error);
+      throw error;
   }
-
-  const res = await retryRequest(() => api.get('/voyages').then(res => res.data));
-  if (isBrowser) {
-    try {
-      localStorage.setItem('cachedOffers', JSON.stringify(res));
-    } catch (e) {
-      console.warn('❗ Failed to cache offers:', e);
-    }
-  }
-  return res;
 };
 
 export default api;

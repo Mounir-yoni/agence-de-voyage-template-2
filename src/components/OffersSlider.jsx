@@ -6,6 +6,8 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getOffers } from '../services/api';
+import { setLocalStorage, getParsedLocalStorage } from '../utils/storage';
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://back-end-2-e1b4.onrender.com/api/v1';
 
@@ -46,26 +48,28 @@ const OffersSlider = () => {
     useEffect(() => {
         const fetchOffers = async () => {
             try {
-                const response = await axios.get('https://back-end-2-e1b4.onrender.com/api/v1/voyages', {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Cache-Control': 'no-cache',
-                        'Pragma': 'no-cache'
-                    },
-                    timeout: 30000 // 10 second timeout
-                });
-                const offersArray = Array.isArray(response.data) ? response.data : response.data.data || [];
+                const data = await getOffers({ url: '/voyages' });
+                const offersArray = Array.isArray(data) ? data : data.data || [];
+                // Cache the offers data
+                setLocalStorage('cachedOffers', JSON.stringify(offersArray));
+                // Duplicate offers for infinite effect
                 const duplicatedOffers = [...offersArray, ...offersArray, ...offersArray];
                 setOffers(duplicatedOffers);
-            } catch (error) {
-                console.error('Error fetching offers:', error);
-                // Set empty array as fallback
-                setOffers([]);
-            } finally {
+                setLoading(false);
+            } catch (err) {
+                console.error('Error details:', err);
+                setError('Failed to load offers. Please try again later.');
                 setLoading(false);
             }
         };
+
+        // Try to load from cache first
+        const cachedOffers = getParsedLocalStorage('cachedOffers');
+        if (cachedOffers) {
+            const duplicatedOffers = [...cachedOffers, ...cachedOffers, ...cachedOffers];
+            setOffers(duplicatedOffers);
+            setLoading(false);
+        }
 
         fetchOffers();
     }, []);

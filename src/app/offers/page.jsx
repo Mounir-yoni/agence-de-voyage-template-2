@@ -7,14 +7,12 @@ export const metadata = {
 
 async function getOffers() {
     try {
-        const response = await axios.get('https://back-end-2-e1b4.onrender.com/api/v1/voyages', {
-            timeout: 20000,
-            headers: {
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache'
-            }
-        });
-        return response.data.data;
+        const res = await fetch('https://back-end-2-e1b4.onrender.com/api/v1/voyages', { cache: 'no-store' });
+        if (!res.ok) {
+            throw new Error('Failed to fetch offers');
+        }
+        const data = await res.json();
+        return data.data;
     } catch (error) {
         console.error('Error fetching offers:', error);
         throw error;
