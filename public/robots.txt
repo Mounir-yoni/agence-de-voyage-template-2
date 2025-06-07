@@ -9,5 +9,5 @@ Sitemap: https://your-domain.com/sitemap.xml
 Disallow: /admin/
 Disallow: /api/
 
-# Crawl-delay
+# Crawl-delay for all bots
 Crawl-delay: 10 

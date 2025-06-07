@@ -100,7 +100,7 @@ const Services = () => {
                 description: 'Recognized for excellence in customer satisfaction and service quality.'
               }
             ].map((feature, index) => (
-              <div key={index} className="bg-[#fbf6e3] rounded-lg p-6 text-center">
+              <div key={index} className="shadow-md rounded-lg p-6 text-center">
                 <div className="text-4xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
                 <p className="text-gray-600">{feature.description}</p>
