@@ -5,12 +5,14 @@ export const metadata = {
     description: 'Our Travel Offers',
 };
 
-
-
 async function getOffers() {
     try {
-        const response = await axios.get('https://back-end-2-e1b4.onrender.com/api/v1/voyages', {
-            timeout: 20000, // 20 ثانية للسماح بالرد عند الاستيقاظ من النوم
+        const response = await axios.get('http://localhost:8000/api/v1/voyages', {
+            timeout: 20000,
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
         });
         return response.data.data;
     } catch (error) {
@@ -40,6 +42,39 @@ export default async function OffersPage() {
                     >
                         Try Again
                     </a>
+                </div>
+            </div>
+        );
+    }
+
+    if (!offers || offers.length === 0) {
+        return (
+            <div className="min-h-screen from-amber-50 to-amber-100 py-12 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
+                {/* Hero Section */}
+                <div className="relative rounded-xl overflow-hidden mb-12 mt-10">
+                    <div className="relative h-40 md:h-80 w-full">
+                        <img
+                            src="https://images.pexels.com/photos/7412069/pexels-photo-7412069.jpeg"
+                            alt="Special Offers"
+                            loading="lazy"
+                            className="object-cover w-full h-full"
+                        />
+                        <div className="absolute inset-0 bg-black/40" />
+                    </div>
+                    <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white p-4">
+                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+                            Special Offers & Deals
+                        </h1>
+                        <p className="text-lg md:text-xl max-w-2xl">
+                            Discover our exclusive promotions and save on your next adventure
+                        </p>
+                    </div>
+                </div>
+                <div className="max-w-7xl mx-auto mt-12 text-center">
+                    <div className="bg-white rounded-lg shadow-lg p-8">
+                        <h2 className="text-2xl font-semibold text-gray-800 mb-4">No Offers Available</h2>
+                        <p className="text-gray-600 mb-6">There are currently no travel offers available. Please check back later for new deals and promotions.</p>
+                    </div>
                 </div>
             </div>
         );

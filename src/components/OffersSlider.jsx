@@ -49,7 +49,9 @@ const OffersSlider = () => {
                 const response = await axios.get('https://back-end-2-e1b4.onrender.com/api/v1/voyages', {
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache'
                     },
                     timeout: 30000 // 10 second timeout
                 });
