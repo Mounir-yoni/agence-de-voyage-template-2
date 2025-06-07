@@ -9,7 +9,7 @@ export const metadata = {
 
 async function getOffers() {
     try {
-        const response = await axios.get('http://localhost:8000/api/v1/voyages', {
+        const response = await axios.get('https://back-end-2-e1b4.onrender.com/api/v1/voyages', {
             timeout: 20000, // 20 ثانية للسماح بالرد عند الاستيقاظ من النوم
         });
         return response.data.data;
