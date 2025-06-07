@@ -51,7 +51,7 @@ const OffersSlider = () => {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    timeout: 10000 // 10 second timeout
+                    timeout: 30000 // 10 second timeout
                 });
                 const offersArray = Array.isArray(response.data) ? response.data : response.data.data || [];
                 const duplicatedOffers = [...offersArray, ...offersArray, ...offersArray];
